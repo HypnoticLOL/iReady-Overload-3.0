@@ -1,6 +1,9 @@
-let csid = document.getElementsByTagName('iframe')[0].src.split('csid=')[1].split('&type')[0];
-let csid2 = csid.split('.phx')[0] + csid.split('_')[0].split('phx')[1];
+if(document.getElementsByTagName('iframe')[0].contentWindow.snarggAdapter != undefined){
+  console.log('lesson compatable')
+csid = document.getElementsByTagName('iframe')[0].src.split('csid=')[1].split('&type')[0];
+csid2 = csid.split('.phx')[0] + csid.split('_')[0].split('phx')[1];
 csid2 = csid2.replaceAll('.', '_');
+
 // gets all units
 // gets all units
 fetch("https://cdn.i-ready.com/instruction/phoenix/master/121/lessonmap.json")
@@ -10,64 +13,28 @@ fetch("https://cdn.i-ready.com/instruction/phoenix/master/121/lessonmap.json")
     .then(unitData => units = unitData)
     .then(function() {
         listLessons();
-
+        if(csid.includes('undefined')==true){console.log('true')}
         // loops through every lesson in unit
         function listLessons(i = 0, j = 0) {
-            fetch("https://api.allorigins.win/raw?url=" + "https://cdn.i-ready.com/instruction/phoenix-content/math/" + csid2 + "/lessonStructure.json")
+            fetch('https://api.allorigins.win/raw?url=https://cdn.i-ready.com/instruction/phoenix-content/math/'+csid2+'/lessonStructure.json')
                 .then(response => response.json())
                 .then(function(lessonData) {
+                  document.getElementsByTagName('iframe')[0].contentWindow.snarggAdapter.StateStore.deleteState()
                     let slideCount = lessonData.lessonStructureObj.slideData.length;
                     let info = "true,".repeat(slideCount)
-
+                    let score=prompt('How many questions would you like to get right out of: '+slideCount+' questions?')
+                    let fin='1,'.repeat(score)
                     document.getElementsByTagName('iframe')[0].contentWindow.snarggAdapter.snarggAPI_.StateStore.save({
-                        "finalStageArr": [info + `{
-                            "6": {
-                                "bgColorStr": "#ff6600",
-                                "currentTileId": 0,
-                                "boxStateArr": [{
-                                    "parentIdInt": 6,
-                                    "idStr": "inputBox_0",
-                                    "xInt": 432,
-                                    "yInt": 156,
-                                    "widthInt": 82.85,
-                                    "heightInt": 44.05,
-                                    "radiusInt": 0,
-                                    "strokeStyleStr": "rgba(0,0,0,1)",
-                                    "initFillStyleStr": "transparent",
-                                    "fillStyleStr": "#ff6600",
-                                    "borderWidthInt": 1,
-                                    "shadowVisibleBool": false,
-                                    "shadowColorStr": "rgba(0,0,0,0.5)",
-                                    "shadowOffsetXInt": 2,
-                                    "shadowOffsetYInt": 2,
-                                    "shadowBlurInt": 10,
-                                    "initBgImageStr": "mcqInputBoxInsetShadow1.png",
-                                    "bgImageStr": "",
-                                    "paddingArr": [0, 0, 0, 0],
-                                    "fontSizeNum": 30,
-                                    "fontFamilyStr": "Komika",
-                                    "fontColorStr": "rgba(0,0,0,1)",
-                                    "valueStr": "3",
-                                    "filterTypeInt": 4,
-                                    "maxLengthInt": 3,
-                                    "showQMarkBool": false,
-                                    "qMarkStyleInt": 1,
-                                    "staticBool": false,
-                                    "qMarkPercentNum": 0.7,
-                                    "glowVisibleBool": false,
-                                    "glowColorStr": "rgb(255,255,0)",
-                                    "glowAnimStyleInt": 1,
-                                    "cursorColorStr": "rgba(0, 0, 0, 1)"
-                                }],
-                                "slideEndFrameInt": 361
-                            }
-                        }`],
+                        "finalStageArr": [info],
                         "curSlideInt": slideCount - 1,
                         "slideCompletedArr": [info],
-                        "allScoreDataArr": [info + 100],
+                        "allScoreDataArr": [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,100],
                         "stateStoreDataObj": {}
                     })
-                  lessonBridge.close()
                 })
         }
     })
+window.open('https://cdn.i-ready.com/instruction/phoenix-content/math/'+csid2+'/lessonStructure.json')
+} else{
+  alert('Your lesson dosnt work with this hack, a new hack for this type of lesson is being made. please wait.')
+}
